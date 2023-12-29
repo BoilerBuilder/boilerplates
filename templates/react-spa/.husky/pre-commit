@@ -1,7 +1,4 @@
-{
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint && yarn format && yarn stylelint && yarn test"
-    }
-  }
-}
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+yarn format && yarn lint && yarn stylelint && yarn test
