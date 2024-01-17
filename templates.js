@@ -1,5 +1,5 @@
 [
-    'react-spa',
-    'next-ssr',
-    'styles-lib'
+    "react-spa",
+    "next-ssr",
+    "styles-lib"
 ]
