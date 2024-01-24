@@ -37,9 +37,6 @@
     ], // Inclui arquivos da pasta "src" no processo de compilação
     "exclude": [
         "node_modules",
-        "dist",
-        "src/index.tsx",
-        "src/**/*.test.tsx",
-        "src/**/index.tsx",
+        "dist"
     ] // Exclui as pastas "node_modules" e "dist" do processo de compilação
 }
