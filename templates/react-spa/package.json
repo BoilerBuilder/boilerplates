@@ -13,13 +13,14 @@
     "stylelint": "stylelint \"src/**/*.scss\" --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:staged": "jest --findRelatedTests --passWithNoTests",
     "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/**.jsx": [
       "yarn lint",
       "yarn format",
-      "yarn test --findRelatedTests"
+      "yarn test:staged"
     ],
     "src/**/**.scss": [
       "yarn stylelint"
