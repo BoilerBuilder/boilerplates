@@ -1,5 +1,6 @@
 [
-    "react-spa",
     "next-ssr",
-    "styles-lib"
+    "react-lib",
+    "react-spa",
+    "styles-lib",
 ]
