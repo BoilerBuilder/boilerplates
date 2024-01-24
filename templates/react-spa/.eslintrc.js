@@ -28,10 +28,7 @@ module.exports = {
     'react-hooks', // Plugin ESLint para Hooks do React
   ],
   rules: {
-    'linebreak-style': [
-      'error',
-      'unix', // Garante que as quebras de linha sejam do estilo Unix (LF)
-    ],
+    'linebreak-style': 0, // Desliga o uso lineabreak para evitar conflito de diferentes OS
     quotes: [
       'error',
       'single', // Força o uso de aspas simples

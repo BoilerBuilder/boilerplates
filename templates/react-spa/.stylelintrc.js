@@ -2,7 +2,8 @@ module.exports = {
   "ignoreFiles": [
     "node_modules/**/*",  // Ignora arquivos dentro do diretório node_modules
     "build/**/*",         // Ignora arquivos dentro do diretório build
-    "dist/**/*"           // Ignora arquivos dentro do diretório dist
+    "dist/**/*",          // Ignora arquivos dentro do diretório dist
+    "src/vendors/**/*"    // Ignora arquivos dentro do diretório src/vendors
   ],
   "plugins": [
     "stylelint-order"     // Plugin para especificar a ordem das propriedades
