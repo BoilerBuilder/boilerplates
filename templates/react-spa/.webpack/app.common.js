@@ -9,7 +9,7 @@ module.exports = {
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
     filename: "[name].[contenthash].js",
-    path: path.resolve(__dirname, "../dist"),
+    path: path.resolve(__dirname, "../build"),
     publicPath: '/',
   },
   resolve: {
