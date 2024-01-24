@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        "target": "es5", // Compila para ES5 para compatibilidade com navegadores mais antigos
+        "module": "es6", // Utiliza módulos ES6
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ], // Inclui as bibliotecas de tipos para DOM e ESNext
+        "allowJs": true, // Permite código JavaScript no projeto TypeScript
+        "jsx": "react-jsx", // Suporta o novo transform JSX do React 17+
+        "declaration": true, // Gera arquivos .d.ts para distribuição
+        "declarationMap": true, // Gera mapas de origem para arquivos de declaração
+        "sourceMap": true, // Gera mapas de origem para debug
+        "outDir": "./dist/types", // Diretório de saída para os arquivos transpilados
+        "strict": true, // Ativa todas as opções estritas de tipo
+        "esModuleInterop": true, // Permite a interoperabilidade de módulo ES6 padrão
+        "skipLibCheck": true, // Pula a checagem de tipos nas declarações de bibliotecas
+        "forceConsistentCasingInFileNames": true, // Impõe que o caso dos nomes de arquivos seja consistente
+        "moduleResolution": "node", // Resolve módulos como Node.js
+        "resolveJsonModule": true, // Permite a importação de módulos JSON
+        "isolatedModules": true, // Garante que cada arquivo possa ser transpilado de forma independente
+        "noEmit": false, // Não impede a geração de arquivos de saída
+        "baseUrl": "./src", // Define a pasta "src" como base para importações relativas
+        "paths": {
+            "@/*": [
+                "*"
+            ] // Permite usar "@" para referenciar diretamente qualquer arquivo dentro de "src"
+        },
+        "types": [
+            "jest",
+            "@testing-library/jest-dom"
+        ]
+    },
+    "include": [
+        "src"
+    ], // Inclui arquivos da pasta "src" no processo de compilação
+    "exclude": [
+        "node_modules",
+        "dist",
+        "src/index.tsx",
+        "src/**/*.test.tsx",
+        "src/**/index.tsx",
+    ] // Exclui as pastas "node_modules" e "dist" do processo de compilação
+}
