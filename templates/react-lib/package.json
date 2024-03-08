@@ -4,6 +4,7 @@
   "description": "Boilerplate for a React component library written in TypeScript.",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
+  "project": "./tsconfig.json",
   "scripts": {
     "dev": "webpack --watch --config .webpack/webpack.dev.js",
     "build": "webpack --config .webpack/webpack.prod.js",

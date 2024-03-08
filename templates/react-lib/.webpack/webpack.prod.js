@@ -8,7 +8,7 @@ module.exports = merge(common, {
     minimize: true, // Ativado por padrão no modo 'production', mas explicitado aqui para clareza
   },
   externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM'
+    react: 'react',
+    'react-dom': 'react-dom'
   }
 });
