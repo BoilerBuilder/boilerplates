@@ -11,6 +11,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
+    "test:related": "vitest related --run",
     "preview": "vite preview",
     "prepare": "husky install"
   },
@@ -18,7 +19,7 @@
     "src/**/**.(js,jsx)": [
       "yarn lint",
       "yarn format",
-      "vitest related --run"
+      "yarn test:related"
     ],
     "src/**/**.(css,scss)": [
       "yarn format",
