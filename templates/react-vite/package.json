@@ -16,12 +16,12 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/**.(js,jsx)": [
+    "src/**/**.{js,jsx}": [
       "yarn lint",
       "yarn format",
       "yarn test:related"
     ],
-    "src/**/**.(css,scss)": [
+    "src/**/**.{css,scss}": [
       "yarn format",
       "yarn stylelint"
     ]
