@@ -1,5 +1,5 @@
 {
-  "name": "react-vite",
+  "name": "react-spa-vite",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -65,5 +65,8 @@
   "engines": {
     "npm": "please-use-yarn",
     "yarn": ">= 1.19.1"
-  }
+  },
+  "keywords": [
+    "react-vite"
+  ]
 }

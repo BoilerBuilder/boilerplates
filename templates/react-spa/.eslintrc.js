@@ -42,5 +42,23 @@ module.exports = {
     'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
     'react-hooks/rules-of-hooks': 'error', // Verifica as regras dos Hooks do React
     'react-hooks/exhaustive-deps': 'warn', // Adverte sobre dependências ausentes nos Hooks do React
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+      },
+    ],
   },
 };
