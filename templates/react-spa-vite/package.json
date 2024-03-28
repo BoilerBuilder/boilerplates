@@ -67,6 +67,6 @@
     "yarn": ">= 1.19.1"
   },
   "keywords": [
-    "react-vite"
+    "react-spa-vite"
   ]
 }
