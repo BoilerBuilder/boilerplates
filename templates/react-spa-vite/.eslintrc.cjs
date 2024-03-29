@@ -12,15 +12,16 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended'
   ],
+  plugins: ['import'],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { 
-    ecmaVersion: 'latest', 
-    sourceType: 'module' 
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
-  settings: { 
-    react: { 
-      version: 'detect' 
-    } 
+  settings: {
+    react: {
+      version: 'detect'
+    }
   },
   rules: {
     'linebreak-style': 0, // Desliga o uso lineabreak para evitar conflito de diferentes OS
@@ -34,23 +35,21 @@ module.exports = {
     ],
     'no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas
     'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
-    'import/order': [
-      'error',
-      {
-        'groups': [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index'
-        ],
-        'alphabetize': {
-          'order': 'asc',
-          'caseInsensitive': true
-        },
-        'newlines-between': 'always'
-      },
-    ],
+    'import/order': ['error', {
+      'groups': ['builtin', 'external', 'internal'],
+      'pathGroups': [
+        {
+          'pattern': 'react*',
+          'group': 'builtin',
+          'position': 'after'
+        }
+      ],
+      'pathGroupsExcludedImportTypes': ['react*'],
+      'newlines-between': 'always',
+      'alphabetize': {
+        'order': 'asc',
+        'caseInsensitive': true
+      }
+    }]
   },
 }
