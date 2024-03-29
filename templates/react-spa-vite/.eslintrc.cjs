@@ -36,15 +36,6 @@ module.exports = {
     'no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas
     'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
     'import/order': ['error', {
-      'groups': ['builtin', 'external', 'internal'],
-      'pathGroups': [
-        {
-          'pattern': 'react*',
-          'group': 'builtin',
-          'position': 'after'
-        }
-      ],
-      'pathGroupsExcludedImportTypes': ['react*'],
       'newlines-between': 'always',
       'alphabetize': {
         'order': 'asc',

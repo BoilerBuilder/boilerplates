@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Counter from '@/app/Counter';
 import Home from '@/app/Home';
 import Loading from '@/app/Loading';
-import Counter from '@/app/Counter';
 
 const routeConfig = [
   {
