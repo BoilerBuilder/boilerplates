@@ -1,7 +1,7 @@
 [
     "next-ssr",
-    "react-lib",
-    "react-spa",
     "react-spa-vite",
-    "styles-lib"
+    "react-lib-webpack",
+    "react-spa-webpack",
+    "styles-lib-webpack"
 ]
