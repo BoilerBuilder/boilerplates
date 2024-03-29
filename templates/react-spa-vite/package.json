@@ -7,7 +7,7 @@
     "build": "vite build",
     "format": "prettier --write src",
     "lint": "eslint src --ext .js,.jsx --fix",
-    "stylelint": "stylelint \"src/**/*.(scss|css)\"",
+    "stylelint": "stylelint \"src/**/*.(scss|css)\" --fix",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage --watch false",
