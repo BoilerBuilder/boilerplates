@@ -42,7 +42,5 @@
     "npm": "please-use-yarn",
     "yarn": ">= 1.19.1"
   },
-  "keywords": [
-    "style-lib-webpack"
-  ]
+  "keywords": ["style-lib-webpack"]
 }
