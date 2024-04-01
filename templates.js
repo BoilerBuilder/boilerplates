@@ -2,6 +2,6 @@
     "next-ssr",
     "react-lib-vite",
     "react-spa-vite",
-    "vanilla-lib-vite",
-    "styles-lib-webpack"
+    "styles-lib-webpack",
+    "ts-lib-vite"
 ]
