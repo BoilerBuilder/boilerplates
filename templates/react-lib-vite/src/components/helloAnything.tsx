@@ -1,3 +1,3 @@
 export function HelloAnything(thing: string): string {
-    return `Hello ${thing}!`
+  return `Hello ${thing}!`;
 }
