@@ -10,8 +10,13 @@
     "eslint": "^8.55.0"
   },
   "author": "Gabriel Mule <gabemule@gmail.com>",
-  "workspaces": ["templates/*", "old_templates/*"],
+  "workspaces": [
+    "templates/*",
+    "old_templates/*"
+  ],
   "private": true,
-  "keywords": ["boilerplates"],
+  "keywords": [
+    "boilerplates"
+  ],
   "license": "MIT"
 }

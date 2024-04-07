@@ -9,7 +9,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['import', 'react-refresh'],
+  plugins: ['react', 'import', 'react-refresh'],
   rules: {
     'linebreak-style': 0, // Desliga o uso lineabreak para evitar conflito de diferentes OS
     quotes: [
