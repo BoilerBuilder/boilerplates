@@ -1,13 +1,14 @@
 import path from 'path';
 
 import react from '@vitejs/plugin-react';
+import ViteRestart from 'vite-plugin-restart';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   build: {
     outDir: 'build/',
   },
-  plugins: [react()],
+  plugins: [react(), ViteRestart({ restart: ['yalc.lock'] })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
