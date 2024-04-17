@@ -33,7 +33,7 @@ module.exports = {
       'error',
       'always', // Garante que declarações terminem com ponto e vírgula
     ],
-    'no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas
+    'no-unused-vars': ['warn', { 'ignoreRestSiblings': true }], // Adverte sobre variáveis declaradas mas não utilizadas
     'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
     'import/order': [
       'error',
@@ -45,5 +45,17 @@ module.exports = {
         },
       },
     ],
+  },
+  globals: {
+    // Vitest globals
+    describe: 'readonly',
+    it: 'readonly',
+    expect: 'readonly',
+    beforeEach: 'readonly',
+    afterEach: 'readonly',
+    beforeAll: 'readonly',
+    afterAll: 'readonly',
+    vi: 'readonly',
+    test: 'readonly',
   },
 };
