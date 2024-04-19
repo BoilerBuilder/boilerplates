@@ -21,7 +21,6 @@ module.exports = {
       'always', // Garante que declarações terminem com ponto e vírgula
     ],
     'no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas
-    'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
     'import/order': [
       'error',
       {
@@ -32,6 +31,7 @@ module.exports = {
         },
       },
     ],
+    'react/jsx-sort-props': 'error', // Força a ordenação das propriedades do JSX
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
