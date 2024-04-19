@@ -3,5 +3,6 @@
     "react-lib-vite",
     "react-spa-vite",
     "styles-lib-webpack",
-    "ts-lib-vite"
+    "ts-lib-vite",
+    "vue-lib-vite"
 ]
