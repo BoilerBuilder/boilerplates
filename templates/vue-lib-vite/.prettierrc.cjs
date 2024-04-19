@@ -4,4 +4,6 @@ module.exports = {
   singleQuote: true, // Usa aspas simples em vez de aspas duplas
   printWidth: 80, // Largura máxima da linha antes de quebrar
   endOfLine: 'auto', // Usa a quebra de linha auto para seja cross os
+  useTabs: false,
+  tabWidth: 2,
 };
