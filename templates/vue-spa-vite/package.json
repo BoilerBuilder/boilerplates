@@ -14,5 +14,12 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "vite": "^5.2.0"
-  }
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
+  },
+  "keywords": [
+    "vue-spa-vite"
+  ]
 }
