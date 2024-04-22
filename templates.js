@@ -4,5 +4,6 @@
     "react-spa-vite",
     "styles-lib-webpack",
     "ts-lib-vite",
-    "vue-lib-vite"
+    "vue-lib-vite",
+    "vue-spa-vite"
 ]
