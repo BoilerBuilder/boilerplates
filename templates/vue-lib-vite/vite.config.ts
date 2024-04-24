@@ -1,9 +1,10 @@
-import { exec } from 'child_process';
 import path from 'path';
 
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import { defineConfig, coverageConfigDefaults } from 'vitest/config';
+
+import { yalcPublish } from './.config/vite-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -13,27 +14,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       dts({ include: ['src'] }),
-      isDevelopment && {
-        name: 'yalc-push',
-        closeBundle: async () => {
-          console.log('[yalc]: Executing `yalc push` command...');
-          exec(
-            'npx yalc publish --push --changed',
-            { cwd: './dist' },
-            (error, stdout, stderr) => {
-              if (error) {
-                console.error(`[yalc error]: ${error}`);
-                return;
-              }
-              if (stderr) {
-                console.error(`[yalc stderr]: ${stderr}`);
-                return;
-              }
-              console.log(`[yalc]: ${stdout}`);
-            },
-          );
-        },
-      },
+      isDevelopment && yalcPublish('./dist'),
     ],
     build: {
       lib: {
