@@ -1,6 +1,7 @@
-import { defineConfig } from 'vitest/config';
 import path from 'path';
+
 import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,7 +9,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/main.ts'),
-      formats: ['es'],
+      name: 'ts-lib',
+      fileName: 'ts-lib',
     },
     rollupOptions: {
       external: [],

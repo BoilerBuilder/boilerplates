@@ -13,7 +13,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   plugins: ['import'],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['build', 'dist', '.eslintrc.cjs'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',

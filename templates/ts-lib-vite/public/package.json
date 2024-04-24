@@ -1,0 +1,13 @@
+{
+  "name": "ts-lib",
+  "version": "1.0.0",
+  "main": "./ts-lib.umd.cjs",
+  "module": "./ts-lib.js",
+  "exports": {
+    ".": {
+      "import": "./ts-lib.js",
+      "require": "./ts-lib.umd.cjs"
+    }
+  },
+  "types": "./main.d.ts"
+}

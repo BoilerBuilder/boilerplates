@@ -1,0 +1,13 @@
+{
+  "name": "react-lib",
+  "version": "1.0.0",
+  "main": "./react-lib.umd.cjs",
+  "module": "./react-lib.js",
+  "exports": {
+    ".": {
+      "import": "./react-lib.js",
+      "require": "./react-lib.umd.cjs"
+    }
+  },
+  "types": "./main.d.ts"
+}
