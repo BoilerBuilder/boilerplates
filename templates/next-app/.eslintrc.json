@@ -24,7 +24,15 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "prettier"
+    "prettier",
+    "import"
+  ],
+  "ignorePatterns": [
+    "node_modules/",
+    "build/",
+    "dist/",
+    "coverage/",
+    ".yalc/"
   ],
   "rules": {
     "react/jsx-uses-react": "off",
@@ -55,5 +63,17 @@
     "react": {
       "version": "detect"
     }
+  },
+  "globals": {
+    // Vitest globals
+    "describe": "readonly",
+    "it": "readonly",
+    "expect": "readonly",
+    "beforeEach": "readonly",
+    "afterEach": "readonly",
+    "beforeAll": "readonly",
+    "afterAll": "readonly",
+    "vi": "readonly",
+    "test": "readonly"
   }
 }
