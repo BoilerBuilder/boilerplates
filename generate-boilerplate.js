@@ -36,7 +36,7 @@ function mergePackageJsons(selections) {
   // Merge base project package.json
   mergePackageProperties(safeReadJson(selections.baseProject.packageJson));
 
-  if (selections.baseProject.name === 'vite') {
+  if (selections.baseProject.name === 'vite' && selections.projectType) {
     // Merge Vite variant package.json
     mergePackageProperties(safeReadJson(selections.baseProject.variants[selections.projectType].packageJson));
   }
@@ -46,10 +46,12 @@ function mergePackageJsons(selections) {
     mergePackageProperties(safeReadJson(config.frameworks[selections.framework].packageJson));
     
     // Merge framework-specific variant package.json
-    const variantPackageJson = selections.projectType === 'lib' 
-      ? config.frameworks[selections.framework].lib.packageJson
-      : config.frameworks[selections.framework].spa.packageJson;
-    mergePackageProperties(safeReadJson(variantPackageJson));
+    if (selections.projectType) {
+      const variantPackageJson = selections.projectType === 'lib' 
+        ? config.frameworks[selections.framework].lib.packageJson
+        : config.frameworks[selections.framework].spa.packageJson;
+      mergePackageProperties(safeReadJson(variantPackageJson));
+    }
   }
 
   // Merge language package.json
@@ -81,14 +83,16 @@ function safeCopySync(src, dest, options = {}) {
 
 function copyTemplateFiles(projectPath, selections) {
   // Copy base project templates
-  if (selections.baseProject.name === 'vite') {
+  if (selections.baseProject.templatePath) {
+    safeCopySync(path.join(__dirname, selections.baseProject.templatePath), projectPath);
+  } else if (selections.baseProject.name === 'vite' && selections.projectType) {
     safeCopySync(path.join(__dirname, selections.baseProject.variants[selections.projectType].templatePath), projectPath);
   } else {
-    safeCopySync(path.join(__dirname, selections.baseProject.templatePath), projectPath);
+    console.warn(`Warning: No template path found for base project ${selections.baseProject.name}. Skipping.`);
   }
 
   // Copy framework templates if applicable
-  if (selections.framework) {
+  if (selections.framework && selections.projectType) {
     const frameworkTemplatePath = selections.projectType === 'lib' 
       ? config.frameworks[selections.framework].lib.templatePath
       : config.frameworks[selections.framework].spa.templatePath;
@@ -96,8 +100,10 @@ function copyTemplateFiles(projectPath, selections) {
   }
 
   // Copy language templates
-  const languageConfig = config.languages.find(lang => lang.name === selections.language);
-  safeCopySync(path.join(__dirname, languageConfig.templatePath), projectPath, { overwrite: true });
+  if (selections.language) {
+    const languageConfig = config.languages.find(lang => lang.name === selections.language);
+    safeCopySync(path.join(__dirname, languageConfig.templatePath), projectPath, { overwrite: true });
+  }
 
   // Copy additional tool templates
   selections.tools.forEach(tool => {
