@@ -1,0 +1,15 @@
+// Convert px to rem
+@function rem($size) {
+  $remSize: $size / 16px;
+  @return #{$remSize}rem;
+}
+
+// Lighten color
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+// Darken color
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}

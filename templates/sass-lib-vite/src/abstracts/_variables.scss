@@ -1,0 +1,20 @@
+// Colors
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+
+// Typography
+$font-stack: 'Helvetica', 'Arial', sans-serif;
+$base-font-size: 16px;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// CSS Custom Properties for theming
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --card-background: #f8f8f8;
+}

@@ -1,0 +1,19 @@
+.brand-a {
+  $primary-color: #ff6b6b;
+  $secondary-color: #4ecdc4;
+
+  .button {
+    &--primary {
+      background-color: $primary-color;
+    }
+    &--secondary {
+      background-color: $secondary-color;
+    }
+  }
+
+  .card {
+    &__title {
+      color: $primary-color;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "sass-lib",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --mode development --watch",
+    "build": "vite build",
+    "format": "prettier --write .",
+    "stylelint": "stylelint \"src/**/*.(scss|css)\" --fix",
+    "prepare": "cd .. && husky install .husky"
+  },
+  "lint-staged": {
+    "src/**/**.{css,scss}": [
+      "yarn format",
+      "yarn stylelint"
+    ]
+  },
+  "browserslist": [
+    "cover 97%"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.4.18",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.2",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "sass": "^1.72.0",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-prettier": "^5.0.0",
+    "vite": "^5.2.0",
+    "vite-plugin-static-copy": "^1.0.2"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
+  },
+  "keywords": [
+    "sass-lib-vite"
+  ]
+}

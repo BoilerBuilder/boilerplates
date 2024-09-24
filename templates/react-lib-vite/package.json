@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "dev": "tsc && vite build  --mode development --watch",
-    "build": "tsc && vite build",
+    "build:development": "tsc && vite build --mode development",
+    "build:staging": "tsc && vite build --mode staging",
+    "build:production": "tsc && vite build --mode production",
     "format": "prettier --write .",
     "lint": "eslint . --ext ts,tsx --fix",
     "test": "vitest",

@@ -1,0 +1,30 @@
+.home {
+  &__hero {
+    background-color: var(--card-background);
+    padding: 4rem 0;
+    text-align: center;
+
+    h1 {
+      font-size: rem(48px);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: rem(20px);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+  }
+
+  &__features {
+    padding: 4rem 0;
+
+    .row {
+      justify-content: center;
+    }
+
+    .card {
+      height: 100%;
+    }
+  }
+}
