@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "Boilerplates for quickly start and maintain our projects.",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "inquirer": "^8.2.0",
+    "fs-extra": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "^8.55.0"
+  },
+  "scripts": {
+    "generate": "node generate-boilerplate.js"
   },
   "author": "Gabriel Mule <gabemule@gmail.com>",
   "workspaces": [

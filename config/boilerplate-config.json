@@ -1,0 +1,103 @@
+{
+  "baseProjects": [
+    {
+      "name": "next",
+      "type": "ssr",
+      "framework": "react",
+      "language": "typescript",
+      "templatePath": "config/base/next/template",
+      "packageJson": "config/base/next/package.json"
+    },
+    {
+      "name": "vite",
+      "type": ["spa", "lib"],
+      "frameworks": ["react", "vue"],
+      "languages": ["javascript", "typescript"],
+      "packageJson": "config/base/vite/package.json",
+      "variants": {
+        "spa": {
+          "templatePath": "config/base/vite/spa/template",
+          "packageJson": "config/base/vite/spa/package.json"
+        },
+        "lib": {
+          "templatePath": "config/base/vite/lib/template",
+          "packageJson": "config/base/vite/lib/package.json"
+        }
+      }
+    }
+  ],
+  "frameworks": {
+    "react": {
+      "packageJson": "config/frameworks/react/package.json",
+      "spa": {
+        "templatePath": "config/frameworks/react/vite-spa/template",
+        "packageJson": "config/frameworks/react/vite-spa/package.json"
+      },
+      "lib": {
+        "templatePath": "config/frameworks/react/vite-lib/template",
+        "packageJson": "config/frameworks/react/vite-lib/package.json"
+      }
+    },
+    "vue": {
+      "packageJson": "config/frameworks/vue/package.json",
+      "spa": {
+        "templatePath": "config/frameworks/vue/vite-spa/template",
+        "packageJson": "config/frameworks/vue/vite-spa/package.json"
+      },
+      "lib": {
+        "templatePath": "config/frameworks/vue/vite-lib/template",
+        "packageJson": "config/frameworks/vue/vite-lib/package.json"
+      }
+    }
+  },
+  "languages": [
+    {
+      "name": "javascript",
+      "templatePath": "config/languages/javascript/template",
+      "packageJson": "config/languages/javascript/package.json"
+    },
+    {
+      "name": "typescript",
+      "templatePath": "config/languages/typescript/template",
+      "packageJson": "config/languages/typescript/package.json"
+    }
+  ],
+  "additionalTools": [
+    {
+      "name": "eslint",
+      "templatePath": "config/tools/eslint/template",
+      "packageJson": "config/tools/eslint/package.json"
+    },
+    {
+      "name": "prettier",
+      "templatePath": "config/tools/prettier/template",
+      "packageJson": "config/tools/prettier/package.json"
+    },
+    {
+      "name": "stylelint",
+      "templatePath": "config/tools/stylelint/template",
+      "packageJson": "config/tools/stylelint/package.json"
+    },
+    {
+      "name": "vitest",
+      "templatePath": "config/tools/vitest/template",
+      "packageJson": "config/tools/vitest/package.json"
+    },
+    {
+      "name": "husky",
+      "templatePath": "config/tools/husky/template",
+      "packageJson": "config/tools/husky/package.json"
+    },
+    {
+      "name": "postcss",
+      "templatePath": "config/tools/postcss/template",
+      "packageJson": "config/tools/postcss/package.json"
+    },
+    {
+      "name": "sass",
+      "templatePath": "config/tools/sass/template",
+      "packageJson": "config/tools/sass/package.json"
+    }
+  ],
+  "commonTemplates": "config/common/template"
+}

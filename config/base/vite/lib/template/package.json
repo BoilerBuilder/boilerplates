@@ -1,0 +1,11 @@
+{
+  "files": ["dist"],
+  "main": "./dist/your-library.umd.js",
+  "module": "./dist/your-library.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/your-library.es.js",
+      "require": "./dist/your-library.umd.js"
+    }
+  }
+}
