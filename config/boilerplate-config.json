@@ -1,67 +1,53 @@
 {
-  "baseProjects": [
-    {
-      "name": "next",
-      "type": "ssr",
-      "framework": "react",
-      "language": "typescript",
-      "templatePath": "config/base/next/template",
-      "packageJson": "config/base/next/package.json"
+  "projectTypes": {
+    "ssr": {
+      "frameworks": {
+        "react": {
+          "languages": ["typescript"],
+          "templatePath": "config/base/next/template",
+          "packageJson": "config/base/next/package.json"
+        }
+      }
     },
-    {
-      "name": "vite",
-      "type": ["spa", "lib"],
-      "frameworks": ["react", "vue"],
-      "languages": ["javascript", "typescript"],
-      "packageJson": "config/base/vite/package.json",
-      "variants": {
-        "spa": {
-          "templatePath": "config/base/vite/spa/template",
-          "packageJson": "config/base/vite/spa/package.json"
+    "spa": {
+      "frameworks": {
+        "react": {
+          "languages": ["javascript", "typescript"],
+          "templatePath": "config/frameworks/react/spa/template",
+          "packageJson": "config/frameworks/react/spa/package.json"
         },
-        "lib": {
-          "templatePath": "config/base/vite/lib/template",
-          "packageJson": "config/base/vite/lib/package.json"
+        "vue": {
+          "languages": ["javascript", "typescript"],
+          "templatePath": "config/frameworks/vue/spa/template",
+          "packageJson": "config/frameworks/vue/spa/package.json"
+        }
+      }
+    },
+    "lib": {
+      "frameworks": {
+        "react": {
+          "languages": ["typescript"],
+          "templatePath": "config/frameworks/react/lib/template",
+          "packageJson": "config/frameworks/react/lib/package.json"
+        },
+        "vue": {
+          "languages": ["typescript"],
+          "templatePath": "config/frameworks/vue/lib/template",
+          "packageJson": "config/frameworks/vue/lib/package.json"
         }
       }
     }
-  ],
-  "frameworks": {
-    "react": {
-      "packageJson": "config/frameworks/react/package.json",
-      "spa": {
-        "templatePath": "config/frameworks/react/vite-spa/template",
-        "packageJson": "config/frameworks/react/vite-spa/package.json"
-      },
-      "lib": {
-        "templatePath": "config/frameworks/react/vite-lib/template",
-        "packageJson": "config/frameworks/react/vite-lib/package.json"
-      }
-    },
-    "vue": {
-      "packageJson": "config/frameworks/vue/package.json",
-      "spa": {
-        "templatePath": "config/frameworks/vue/vite-spa/template",
-        "packageJson": "config/frameworks/vue/vite-spa/package.json"
-      },
-      "lib": {
-        "templatePath": "config/frameworks/vue/vite-lib/template",
-        "packageJson": "config/frameworks/vue/vite-lib/package.json"
-      }
-    }
   },
-  "languages": [
-    {
-      "name": "javascript",
+  "languages": {
+    "javascript": {
       "templatePath": "config/languages/javascript/template",
       "packageJson": "config/languages/javascript/package.json"
     },
-    {
-      "name": "typescript",
+    "typescript": {
       "templatePath": "config/languages/typescript/template",
       "packageJson": "config/languages/typescript/package.json"
     }
-  ],
+  },
   "additionalTools": [
     {
       "name": "eslint",

@@ -2,9 +2,11 @@
   "name": "boilerplates",
   "version": "1.0.0",
   "description": "Boilerplates for quickly start and maintain our projects.",
+  "type": "module",
   "dependencies": {
-    "inquirer": "^8.2.0",
-    "fs-extra": "^10.0.0"
+    "commander": "^12.1.0",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^8.2.0"
   },
   "devDependencies": {
     "eslint": "^8.55.0"

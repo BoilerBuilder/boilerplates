@@ -1,6 +1,14 @@
 {
   "devDependencies": {
-    "vitest": "^0.22.0",
-    "@vitest/ui": "^0.22.0"
+    "vitest": "^1.6.0",
+    "@vitest/ui": "^1.4.0",
+    "@vitest/coverage-v8": "^1.4.0"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui --coverage",
+    "test:coverage": "vitest --run --coverage",
+    "test:coverage:watch": "vitest --coverage",
+    "test:related": "vitest related --run"
   }
 }

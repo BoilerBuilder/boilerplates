@@ -1,10 +1,25 @@
-const fs = require('fs-extra');
-const path = require('path');
-const inquirer = require('inquirer');
+import fs from 'fs-extra';
+import path from 'path';
+import inquirer from 'inquirer';
+import { program } from 'commander';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Path to the main configuration file
 const CONFIG_PATH = path.join(__dirname, 'config', 'boilerplate-config.json');
-const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+let config;
 
+// Load the configuration file
+try {
+  config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+} catch (error) {
+  console.warn(`Warning: Could not read ${CONFIG_PATH}. Using empty config.`);
+  config = {};
+}
+
+// Safely read and parse a JSON file
 function safeReadJson(filePath) {
   try {
     return JSON.parse(fs.readFileSync(path.join(__dirname, filePath), 'utf8'));
@@ -14,7 +29,45 @@ function safeReadJson(filePath) {
   }
 }
 
-function mergePackageJsons(selections) {
+// Ensure a directory exists, creating it if necessary
+function ensureDirectoryExists(dir) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirpSync(dir);
+    console.log(`Created directory: ${dir}`);
+  }
+}
+
+// Merge two ESLint configurations
+function mergeEslintConfigs(baseConfig, specificConfig) {
+  const mergedConfig = { ...baseConfig };
+
+  // Merge extends
+  if (specificConfig.extends) {
+    mergedConfig.extends = [
+      ...(baseConfig.extends || []),
+      ...(Array.isArray(specificConfig.extends) ? specificConfig.extends : [specificConfig.extends]),
+    ];
+  }
+
+  // Merge plugins
+  if (specificConfig.plugins) {
+    mergedConfig.plugins = [
+      ...(baseConfig.plugins || []),
+      ...(Array.isArray(specificConfig.plugins) ? specificConfig.plugins : [specificConfig.plugins]),
+    ];
+  }
+
+  // Merge rules
+  if (specificConfig.rules) {
+    mergedConfig.rules = { ...(baseConfig.rules || {}), ...specificConfig.rules };
+  }
+
+  return mergedConfig;
+}
+
+// Merge package.json files based on project selections
+export function mergePackageJsons(selections) {
+  console.log('Merging package.json files...');
   let mergedPackageJson = {
     dependencies: {},
     devDependencies: {},
@@ -31,48 +84,59 @@ function mergePackageJsons(selections) {
     if (source.scripts) {
       mergedPackageJson.scripts = { ...mergedPackageJson.scripts, ...source.scripts };
     }
-  }
-
-  // Merge base project package.json
-  mergePackageProperties(safeReadJson(selections.baseProject.packageJson));
-
-  if (selections.baseProject.name === 'vite' && selections.projectType) {
-    // Merge Vite variant package.json
-    mergePackageProperties(safeReadJson(selections.baseProject.variants[selections.projectType].packageJson));
-  }
-
-  // Merge framework package.json
-  if (selections.framework) {
-    mergePackageProperties(safeReadJson(config.frameworks[selections.framework].packageJson));
-    
-    // Merge framework-specific variant package.json
-    if (selections.projectType) {
-      const variantPackageJson = selections.projectType === 'lib' 
-        ? config.frameworks[selections.framework].lib.packageJson
-        : config.frameworks[selections.framework].spa.packageJson;
-      mergePackageProperties(safeReadJson(variantPackageJson));
+    // Merge other top-level properties
+    for (const [key, value] of Object.entries(source)) {
+      if (!['dependencies', 'devDependencies', 'scripts'].includes(key)) {
+        mergedPackageJson[key] = value;
+      }
     }
   }
 
+  // Merge base project package.json
+  let basePackageJsonPath;
+  if (selections.projectType === 'ssr') {
+    basePackageJsonPath = 'config/base/next/package.json';
+  } else {
+    basePackageJsonPath = `config/frameworks/${selections.framework}/package.json`;
+  }
+  console.log(`Merging base ${selections.projectType} package.json...`);
+  mergePackageProperties(safeReadJson(basePackageJsonPath));
+
+  // Merge project type specific package.json
+  if (selections.projectType !== 'ssr') {
+    const projectTypePackageJsonPath = `config/frameworks/${selections.framework}/${selections.projectType}/package.json`;
+    console.log(`Merging ${selections.projectType} ${selections.framework} package.json...`);
+    mergePackageProperties(safeReadJson(projectTypePackageJsonPath));
+  }
+
   // Merge language package.json
-  if (selections.language) {
-    const languageConfig = config.languages.find(lang => lang.name === selections.language);
+  const languageConfig = config.languages[selections.language];
+  if (languageConfig) {
+    console.log(`Merging ${selections.language} package.json...`);
     mergePackageProperties(safeReadJson(languageConfig.packageJson));
   }
 
   // Merge tool package.jsons
   selections.tools.forEach(tool => {
     const toolConfig = config.additionalTools.find(t => t.name === tool);
-    mergePackageProperties(safeReadJson(toolConfig.packageJson));
+    if (toolConfig) {
+      console.log(`Merging ${tool} package.json...`);
+      mergePackageProperties(safeReadJson(toolConfig.packageJson));
+    }
   });
 
+  console.log('Package.json files merged successfully.');
   return mergedPackageJson;
 }
 
+// Safely copy files or directories
 function safeCopySync(src, dest, options = {}) {
   try {
     if (fs.existsSync(src)) {
-      fs.copySync(src, dest, options);
+      if (!options.dryRun) {
+        fs.copySync(src, dest, options);
+      }
+      console.log(`${options.dryRun ? '[Dry run] Would copy' : 'Copied'} ${src} to ${dest}`);
     } else {
       console.warn(`Warning: Source directory not found: ${src}. Skipping.`);
     }
@@ -81,41 +145,94 @@ function safeCopySync(src, dest, options = {}) {
   }
 }
 
-function copyTemplateFiles(projectPath, selections) {
+// Copy template files based on project selections
+export async function copyTemplateFiles(projectPath, selections, options) {
+  console.log('Copying template files...');
+
   // Copy base project templates
-  if (selections.baseProject.templatePath) {
-    safeCopySync(path.join(__dirname, selections.baseProject.templatePath), projectPath);
-  } else if (selections.baseProject.name === 'vite' && selections.projectType) {
-    safeCopySync(path.join(__dirname, selections.baseProject.variants[selections.projectType].templatePath), projectPath);
+  let baseTemplatePath;
+  if (selections.projectType === 'ssr') {
+    baseTemplatePath = 'config/base/next/template';
   } else {
-    console.warn(`Warning: No template path found for base project ${selections.baseProject.name}. Skipping.`);
+    baseTemplatePath = `config/frameworks/${selections.framework}/template`;
+  }
+  
+  if (fs.existsSync(path.join(__dirname, baseTemplatePath))) {
+    console.log(`Copying base ${selections.projectType} templates...`);
+    safeCopySync(path.join(__dirname, baseTemplatePath), projectPath, options);
+  } else {
+    console.log(`No base ${selections.projectType} templates found. Skipping.`);
   }
 
-  // Copy framework templates if applicable
-  if (selections.framework && selections.projectType) {
-    const frameworkTemplatePath = selections.projectType === 'lib' 
-      ? config.frameworks[selections.framework].lib.templatePath
-      : config.frameworks[selections.framework].spa.templatePath;
-    safeCopySync(path.join(__dirname, frameworkTemplatePath), projectPath, { overwrite: true });
+  // Copy project type specific templates (for non-SSR projects)
+  if (selections.projectType !== 'ssr') {
+    const projectTypeTemplatePath = `config/frameworks/${selections.framework}/${selections.projectType}/template`;
+    console.log(`Copying ${selections.projectType} ${selections.framework} templates...`);
+    safeCopySync(path.join(__dirname, projectTypeTemplatePath), projectPath, { ...options, overwrite: true });
   }
 
   // Copy language templates
-  if (selections.language) {
-    const languageConfig = config.languages.find(lang => lang.name === selections.language);
-    safeCopySync(path.join(__dirname, languageConfig.templatePath), projectPath, { overwrite: true });
+  const languageConfig = config.languages[selections.language];
+  if (languageConfig) {
+    console.log(`Copying ${selections.language} templates...`);
+    safeCopySync(path.join(__dirname, languageConfig.templatePath), projectPath, { ...options, overwrite: true });
   }
 
   // Copy additional tool templates
   selections.tools.forEach(tool => {
     const toolConfig = config.additionalTools.find(t => t.name === tool);
-    safeCopySync(path.join(__dirname, toolConfig.templatePath), projectPath, { overwrite: true });
+    if (toolConfig) {
+      console.log(`Copying ${tool} templates...`);
+      safeCopySync(path.join(__dirname, toolConfig.templatePath), projectPath, { ...options, overwrite: true });
+
+      // Copy project type specific tool config if it exists
+      const projectTypeToolConfigPath = `config/tools/${tool}/${selections.projectType}`;
+      if (fs.existsSync(path.join(__dirname, projectTypeToolConfigPath))) {
+        console.log(`Copying ${selections.projectType}-specific ${tool} config...`);
+        safeCopySync(path.join(__dirname, projectTypeToolConfigPath), projectPath, { ...options, overwrite: true });
+      }
+    }
   });
 
   // Copy common templates
-  safeCopySync(path.join(__dirname, config.commonTemplates), projectPath, { overwrite: true });
+  if (config.commonTemplates) {
+    console.log('Copying common templates...');
+    safeCopySync(path.join(__dirname, config.commonTemplates), projectPath, { ...options, overwrite: true });
+  }
+
+  // Handle ESLint configuration
+  if (selections.tools.includes('eslint')) {
+    console.log('Merging ESLint configurations...');
+    const baseEslintConfigPath = path.join(__dirname, 'config/tools/eslint/template/.eslintrc.js');
+    const baseEslintConfig = await import(baseEslintConfigPath);
+    let mergedEslintConfig = baseEslintConfig.default;
+
+    // Merge framework-specific ESLint config if it exists
+    const frameworkEslintPath = path.join(__dirname, `config/tools/eslint/variations/${selections.framework}/.eslintrc.js`);
+    if (fs.existsSync(frameworkEslintPath)) {
+      const frameworkEslintConfig = await import(frameworkEslintPath);
+      mergedEslintConfig = mergeEslintConfigs(mergedEslintConfig, frameworkEslintConfig.default);
+    }
+
+    // Merge project type-specific ESLint config if it exists
+    const typeEslintPath = path.join(__dirname, `config/tools/eslint/variations/${selections.projectType}/.eslintrc.js`);
+    if (fs.existsSync(typeEslintPath)) {
+      const typeEslintConfig = await import(typeEslintPath);
+      mergedEslintConfig = mergeEslintConfigs(mergedEslintConfig, typeEslintConfig.default);
+    }
+
+    // Write the merged ESLint configuration
+    const eslintConfigPath = path.join(projectPath, '.eslintrc.js');
+    fs.writeFileSync(eslintConfigPath, `export default ${JSON.stringify(mergedEslintConfig, null, 2)}`);
+    console.log(`ESLint configuration written to ${eslintConfigPath}`);
+  }
+
+  console.log('All template files copied successfully.');
 }
 
-function validateResources() {
+// Validate that all necessary resources exist
+export function validateResources() {
+  console.log('Validating resources...');
   let isValid = true;
   const missingResources = [];
 
@@ -127,47 +244,49 @@ function validateResources() {
     }
   }
 
-  // Check base projects
-  config.baseProjects.forEach(project => {
-    if (project.name === 'vite') {
-      checkResource(project.packageJson, 'Base project package.json');
-      Object.values(project.variants).forEach(variant => {
-        checkResource(variant.templatePath, 'Variant template');
-        checkResource(variant.packageJson, 'Variant package.json');
-      });
+  // Check project types, frameworks, and languages
+  Object.entries(config.projectTypes || {}).forEach(([projectType, projectTypeConfig]) => {
+    if (projectType === 'ssr') {
+      checkResource('config/base/next/template', 'SSR template');
+      checkResource('config/base/next/package.json', 'SSR package.json');
     } else {
-      checkResource(project.templatePath, 'Base project template');
-      checkResource(project.packageJson, 'Base project package.json');
+      Object.entries(projectTypeConfig.frameworks || {}).forEach(([framework, frameworkConfig]) => {
+        checkResource(frameworkConfig.templatePath, `${projectType} ${framework} template`);
+        checkResource(frameworkConfig.packageJson, `${projectType} ${framework} package.json`);
+      });
     }
   });
 
-  // Check frameworks
-  Object.values(config.frameworks).forEach(framework => {
-    checkResource(framework.packageJson, 'Framework package.json');
-    if (framework.spa) checkResource(framework.spa.templatePath, 'Framework SPA template');
-    if (framework.lib) checkResource(framework.lib.templatePath, 'Framework Library template');
-  });
-
   // Check languages
-  config.languages.forEach(lang => {
-    checkResource(lang.templatePath, 'Language template');
-    checkResource(lang.packageJson, 'Language package.json');
+  Object.entries(config.languages || {}).forEach(([language, languageConfig]) => {
+    checkResource(languageConfig.templatePath, `${language} template`);
+    checkResource(languageConfig.packageJson, `${language} package.json`);
   });
 
   // Check additional tools
-  config.additionalTools.forEach(tool => {
-    checkResource(tool.templatePath, 'Tool template');
-    checkResource(tool.packageJson, 'Tool package.json');
+  (config.additionalTools || []).forEach(tool => {
+    checkResource(tool.templatePath, `${tool.name} template`);
+    checkResource(tool.packageJson, `${tool.name} package.json`);
   });
 
   // Check common templates
-  checkResource(config.commonTemplates, 'Common templates');
+  if (config.commonTemplates) {
+    checkResource(config.commonTemplates, 'Common templates');
+  }
+
+  if (isValid) {
+    console.log('All resources validated successfully.');
+  } else {
+    console.log('Resource validation failed.');
+  }
 
   return { isValid, missingResources };
 }
 
-async function generateBoilerplate() {
+// Main function to generate the boilerplate
+async function generateBoilerplate(options) {
   try {
+    console.log('Starting boilerplate generation...');
     const { isValid, missingResources } = validateResources();
     if (!isValid) {
       console.error('Error: The following resources are missing:');
@@ -176,69 +295,117 @@ async function generateBoilerplate() {
       return;
     }
 
-    const answers = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'projectName',
-        message: 'Enter the project name:',
-        default: 'my-project'
-      },
-      {
-        type: 'list',
-        name: 'baseProject',
-        message: 'Select a base project:',
-        choices: config.baseProjects.map(project => ({ name: project.name, value: project }))
-      },
-      {
-        type: 'list',
-        name: 'projectType',
-        message: 'Select project type:',
-        choices: (answers) => answers.baseProject.type,
-        when: (answers) => Array.isArray(answers.baseProject.type)
-      },
-      {
-        type: 'list',
-        name: 'framework',
-        message: 'Select a framework:',
-        choices: (answers) => answers.baseProject.frameworks,
-        when: (answers) => answers.baseProject.frameworks && answers.baseProject.frameworks.length > 0
-      },
-      {
-        type: 'list',
-        name: 'language',
-        message: 'Select a language:',
-        choices: (answers) => answers.baseProject.languages,
-        when: (answers) => answers.baseProject.languages && answers.baseProject.languages.length > 1
-      },
-      {
-        type: 'checkbox',
-        name: 'tools',
-        message: 'Select additional tools:',
-        choices: config.additionalTools.map(tool => tool.name)
+    let answers = options;
+
+    // Prompt for missing information
+    if (!options.projectName || !options.projectType || !options.tools) {
+      console.log('Starting interactive prompt for project configuration...');
+      const promptAnswers = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'projectName',
+          message: 'Enter the project name:',
+          default: 'my-project',
+          when: !options.projectName
+        },
+        {
+          type: 'list',
+          name: 'projectType',
+          message: 'Select project type:',
+          choices: Object.keys(config.projectTypes || {}),
+          when: !options.projectType
+        },
+        {
+          type: 'checkbox',
+          name: 'tools',
+          message: 'Select additional tools:',
+          choices: config.additionalTools.map(tool => tool.name),
+          when: !options.tools || options.tools.length === 0
+        }
+      ]);
+      answers = { ...options, ...promptAnswers };
+
+      // Only prompt for framework and language if it's not an SSR project
+      if (answers.projectType !== 'ssr' && (!options.framework || !options.language)) {
+        const additionalPrompts = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'framework',
+            message: 'Select a framework:',
+            choices: Object.keys(config.projectTypes[answers.projectType].frameworks || {}),
+            when: !options.framework
+          },
+          {
+            type: 'list',
+            name: 'language',
+            message: 'Select a language:',
+            choices: (answers) => {
+              const framework = answers.framework || options.framework;
+              return config.projectTypes[answers.projectType].frameworks[framework].languages || [];
+            },
+            when: !options.language
+          }
+        ]);
+        answers = { ...answers, ...additionalPrompts };
       }
-    ]);
+
+      console.log('Interactive prompt completed.');
+    }
+
+    // Set default values for SSR projects
+    if (answers.projectType === 'ssr') {
+      answers.framework = 'react';
+      answers.language = 'typescript';
+    }
 
     console.log('Generating boilerplate with the following configuration:');
     console.log(JSON.stringify(answers, null, 2));
 
     const projectPath = path.join(process.cwd(), answers.projectName);
-    fs.ensureDirSync(projectPath);
+    console.log(`${options.dryRun ? '[Dry run] Would create' : 'Creating'} project directory: ${projectPath}`);
+    if (!options.dryRun) {
+      ensureDirectoryExists(projectPath);
+    }
 
     const mergedPackageJson = mergePackageJsons(answers);
-    copyTemplateFiles(projectPath, answers);
+    await copyTemplateFiles(projectPath, answers, { dryRun: options.dryRun });
 
     // Write the final package.json
-    fs.writeJsonSync(path.join(projectPath, 'package.json'), {
-      name: answers.projectName,
-      version: '1.0.0',
-      private: true,
-      ...mergedPackageJson
-    }, { spaces: 2 });
+    console.log(`${options.dryRun ? '[Dry run] Would write' : 'Writing'} final package.json...`);
+    if (!options.dryRun) {
+      fs.writeJsonSync(path.join(projectPath, 'package.json'), {
+        name: answers.projectName,
+        version: '1.0.0',
+        private: true,
+        ...mergedPackageJson
+      }, { spaces: 2 });
+    }
 
-    console.log(`Boilerplate generated successfully in ${projectPath}!`);
+    console.log(`Boilerplate ${options.dryRun ? 'would be' : 'was'} generated successfully in ${projectPath}!`);
+    if (!options.dryRun) {
+      console.log('You can now cd into your project directory and start working on your project.');
+      console.log(`To get started, run the following commands:
+      cd ${answers.projectName}
+      yarn install
+      yarn start`);
+    }
   } catch (error) {
     console.error('An error occurred during boilerplate generation:', error);
   }
 }
 
-generateBoilerplate().catch(console.error);
+// Set up command-line interface
+program
+  .version('1.0.0')
+  .description('Generate a project boilerplate')
+  .option('-n, --project-name <n>', 'Project name')
+  .option('-t, --project-type <type>', 'Project type (ssr, spa, lib)')
+  .option('-f, --framework <framework>', 'Framework')
+  .option('-l, --language <language>', 'Programming language')
+  .option('--tools <tools...>', 'Additional tools')
+  .option('-d, --dry-run', 'Perform a dry run without creating files')
+  .action((options) => {
+    generateBoilerplate(options);
+  });
+
+program.parse(process.argv);
