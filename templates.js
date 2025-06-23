@@ -2,7 +2,7 @@
     "next-app",
     "react-lib-vite",
     "react-spa-vite",
-    "styles-lib-webpack",
+    "sass-lib-vite",
     "ts-lib-vite",
     "vue-lib-vite",
     "vue-spa-vite"
