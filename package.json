@@ -2,6 +2,20 @@
   "name": "boilerplates",
   "version": "1.0.0",
   "description": "Boilerplates for quickly start and maintain our projects.",
+  "scripts": {
+    "update-deps": "node scripts/update-dependencies.js",
+    "sync-deps": "yarn update-deps",
+    "check-deps": "node scripts/update-dependencies.js --dry-run",
+    "update-and-sync": "node scripts/update-and-sync-dependencies.js",
+    "update-minor": "node scripts/update-and-sync-dependencies.js --minor",
+    "update-patch": "node scripts/update-and-sync-dependencies.js --patch",
+    "check-updates": "node scripts/update-and-sync-dependencies.js --dry-run",
+    "check-updates-minor": "node scripts/update-and-sync-dependencies.js --dry-run --minor",
+    "check-updates-patch": "node scripts/update-and-sync-dependencies.js --dry-run --patch",
+    "auto-update": "node scripts/update-and-sync-dependencies.js --auto-apply",
+    "auto-update-minor": "node scripts/update-and-sync-dependencies.js --auto-apply --minor",
+    "auto-update-patch": "node scripts/update-and-sync-dependencies.js --auto-apply --patch"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
