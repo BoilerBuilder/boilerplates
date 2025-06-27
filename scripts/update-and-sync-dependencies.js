@@ -316,6 +316,18 @@ function promptUser(question) {
   });
 }
 
+function saveAnalysisToFile(analysisResult = {}, enableUniqueFileName = false) {
+  const fileName = enableUniqueFileName ? `analysis-${Date.now()}.json` : 'analysis.json';
+  const pathToSave = path.join(__dirname, '../analysis-results');
+  const pathValidation = fs.existsSync(pathToSave);
+  if (!pathValidation) {
+    fs.mkdirSync(pathToSave);
+  }
+
+  fs.writeFileSync(path.join(pathToSave, fileName), JSON.stringify(analysisResult, null, 2));
+  log(`📝 Analysis saved to ${pathToSave}/${fileName}`, 'green');
+}
+
 // Main function
 async function main() {
   const args = process.argv.slice(2);
@@ -323,6 +335,7 @@ async function main() {
   const autoApply = args.includes('--auto-apply');
   const minorOnly = args.includes('--minor');
   const patchOnly = args.includes('--patch');
+  const uniqueFileName = args.includes('--dry-run-unique-file-name');
 
   // Determine target level
   const targetLevel = patchOnly ? 'patch' : minorOnly ? 'minor' : 'latest';
@@ -371,6 +384,7 @@ async function main() {
 
   if (dryRun) {
     log('\n📋 DRY RUN completed - no changes made', 'yellow');
+    saveAnalysisToFile({updates, security}, uniqueFileName);
     return;
   }
 
