@@ -38,11 +38,11 @@ function buildTemplateDependencies(templateName, templateConfig) {
   // 1. Start with common configuration
   mergedConfig = deepMerge(mergedConfig, config.common);
 
-  // 2. Add framework-specific dependencies
-  if (templateConfig.frameworks) {
-    templateConfig.frameworks.forEach(framework => {
-      if (config.frameworks[framework]) {
-        mergedConfig = deepMerge(mergedConfig, config.frameworks[framework]);
+  // 2. Add jsTool-specific dependencies
+  if (templateConfig.jsTools) {
+    templateConfig.jsTools.forEach(jsTool => {
+      if (config.jsTools[jsTool]) {
+        mergedConfig = deepMerge(mergedConfig, config.jsTools[jsTool]);
       }
     });
   }

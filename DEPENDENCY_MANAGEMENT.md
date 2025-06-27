@@ -6,7 +6,7 @@ This document explains how to manage dependencies across all boilerplate templat
 
 The centralized dependency management system allows you to:
 - Define common dependencies once and propagate them to all templates
-- Organize dependencies by framework (React, Vue, TypeScript, etc.)
+- Organize dependencies by jsTools (React, Vue, TypeScript, etc.)
 - Organize dependencies by build tools (Vite, Webpack, PostCSS, etc.)
 - Maintain template-specific dependencies and configurations
 - Keep all dependencies consistent and up-to-date across templates
@@ -31,8 +31,8 @@ The configuration is organized into several sections:
 ### Common Dependencies
 Dependencies shared across multiple templates (eslint, prettier, husky, etc.)
 
-### Framework Dependencies
-Dependencies specific to frameworks:
+### jsTools Dependencies
+Dependencies specific to jsTools:
 - `react`: React and React DOM + testing libraries
 - `vue`: Vue + testing libraries  
 - `typescript`: TypeScript + ESLint plugins
@@ -47,7 +47,7 @@ Dependencies for build tools:
 
 ### Template-Specific Configuration
 Each template can specify:
-- Which frameworks to include
+- Which jsTools to include
 - Which build tools to include
 - Custom dependencies unique to that template
 - Custom scripts unique to that template
@@ -121,11 +121,11 @@ common: {
 }
 ```
 
-#### 2. Framework Dependencies
-Add to the appropriate framework section:
+#### 2. jsTools Dependencies
+Add to the appropriate jsTools section:
 
 ```javascript
-frameworks: {
+jsTools: {
   react: {
     devDependencies: {
       "@testing-library/react": "^15.0.7",
@@ -158,7 +158,7 @@ templates: {
 ```javascript
 templates: {
   "new-template": {
-    frameworks: ["react", "typescript"],  // Which frameworks to include
+    jsTools: ["react", "typescript"],  // Which jsTools to include
     buildTools: ["vite", "sass"],        // Which build tools to include
     customDependencies: {
       dependencies: {
@@ -229,12 +229,12 @@ templates: {
 - Use exact versions for build tools and loose versions for libraries
 - Update versions in the central config first, then propagate
 
-### 2. Framework Separation
-- Keep framework-specific dependencies in their respective sections
+### 2. jsTools Separation
+- Keep jsTools-specific dependencies in their respective sections
 - Don't mix React and Vue dependencies in common sections
 
 ### 3. Build Tool Organization
-- Separate build tool dependencies from framework dependencies
+- Separate build tool dependencies from jsTools dependencies
 - Group related tools together (e.g., PostCSS + Autoprefixer)
 
 ### 4. Template Customization
@@ -248,7 +248,7 @@ The `update-dependencies.js` script:
 1. Reads the central configuration
 2. For each template, merges:
    - Common dependencies
-   - Framework dependencies (based on template config)
+   - jsTools dependencies (based on template config)
    - Build tool dependencies (based on template config)
    - Custom dependencies (template-specific)
 3. Preserves existing package.json fields (name, version, description, etc.)
@@ -264,11 +264,11 @@ The `update-dependencies.js` script:
 
 ### Dependencies Not Applied
 - Check the template configuration in `dependencies.config.js`
-- Ensure framework/buildTool names are spelled correctly
+- Ensure jsTools/buildTool names are spelled correctly
 - Run script with increased verbosity: `node scripts/update-dependencies.js`
 
 ### Conflicts Between Dependencies
-- Custom dependencies override framework/common dependencies
+- Custom dependencies override jsTools/common dependencies
 - Check for conflicting version requirements
 - Use peer dependencies for libraries that should be provided by the consuming application
 
@@ -325,7 +325,7 @@ The `update-dependencies.js` script:
 4. **Add new React testing utility:**
    ```javascript
    // In dependencies.config.js
-   frameworks: {
+   jsTools: {
      react: {
        devDependencies: {
          "@testing-library/user-event": "^14.0.0"  // Add new tool
@@ -342,7 +342,7 @@ The `update-dependencies.js` script:
    // In dependencies.config.js
    templates: {
      "vue-ssr-nuxt": {
-       frameworks: ["vue", "typescript"],
+       jsTools: ["vue", "typescript"],
        buildTools: ["postcss"],
        customDependencies: {
          dependencies: {

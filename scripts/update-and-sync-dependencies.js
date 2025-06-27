@@ -79,12 +79,12 @@ function getAllDependenciesFromConfig() {
     Object.assign(allDeps.peerDependencies, config.common.peerDependencies || {});
   }
 
-  // Collect from frameworks
-  if (config.frameworks) {
-    Object.values(config.frameworks).forEach(framework => {
-      Object.assign(allDeps.dependencies, framework.dependencies || {});
-      Object.assign(allDeps.devDependencies, framework.devDependencies || {});
-      Object.assign(allDeps.peerDependencies, framework.peerDependencies || {});
+  // Collect from jsTools
+  if (config.jsTools) {
+    Object.values(config.jsTool).forEach(jsTool => {
+      Object.assign(allDeps.dependencies, jsTool.dependencies || {});
+      Object.assign(allDeps.devDependencies, jsTool.devDependencies || {});
+      Object.assign(allDeps.peerDependencies, jsTool.peerDependencies || {});
     });
   }
 

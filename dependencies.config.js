@@ -9,7 +9,7 @@ module.exports = {
     // Development tools
     devDependencies: {
       "eslint": "^8.57.1",
-      "prettier": "^3.6.1",
+      "prettier": "^3.6.2",
       "husky": "^8.0.3",
       "lint-staged": "^15.5.2",
     },
