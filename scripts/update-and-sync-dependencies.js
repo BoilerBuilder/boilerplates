@@ -81,7 +81,7 @@ function getAllDependenciesFromConfig() {
 
   // Collect from jsTools
   if (config.jsTools) {
-    Object.values(config.jsTool).forEach(jsTool => {
+    Object.values(config.jsTools).forEach(jsTool => {
       Object.assign(allDeps.dependencies, jsTool.dependencies || {});
       Object.assign(allDeps.devDependencies, jsTool.devDependencies || {});
       Object.assign(allDeps.peerDependencies, jsTool.peerDependencies || {});
