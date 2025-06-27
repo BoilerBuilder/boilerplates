@@ -20,8 +20,8 @@ module.exports = {
     }
   },
 
-  // Framework-specific dependencies
-  frameworks: {
+  // jsTools-specific dependencies
+  jsTools: {
     react: {
       dependencies: {
         "react": "^18.3.1",
@@ -98,7 +98,7 @@ module.exports = {
   // Template-specific configurations
   templates: {
     "next-app": {
-      frameworks: ["react", "typescript"],
+      jsTools: ["react", "typescript"],
       buildTools: [],
       customDependencies: {
         dependencies: {
@@ -111,7 +111,7 @@ module.exports = {
       }
     },
     "react-spa-vite": {
-      frameworks: ["react", "vite"],
+      jsTools: ["react", "vite"],
       buildTools: ["postcss", "sass"],
       customDependencies: {
         dependencies: {
@@ -131,7 +131,7 @@ module.exports = {
       }
     },
     "react-lib-vite": {
-      frameworks: ["react", "typescript", "vite"],
+      jsTools: ["react", "typescript", "vite"],
       buildTools: [],
       customDependencies: {
         peerDependencies: {
@@ -149,12 +149,12 @@ module.exports = {
       }
     },
     "vue-spa-vite": {
-      frameworks: ["vue", "vite"],
+      jsTools: ["vue", "vite"],
       buildTools: [],
       customDependencies: {}
     },
     "vue-lib-vite": {
-      frameworks: ["vue", "typescript", "vite"],
+      jsTools: ["vue", "typescript", "vite"],
       buildTools: [],
       customDependencies: {
         peerDependencies: {
@@ -171,7 +171,7 @@ module.exports = {
       }
     },
     "ts-lib-vite": {
-      frameworks: ["typescript", "vite"],
+      jsTools: ["typescript", "vite"],
       buildTools: [],
       customDependencies: {
         devDependencies: {
@@ -184,7 +184,7 @@ module.exports = {
       }
     },
     "styles-lib-webpack": {
-      frameworks: [],
+      jsTools: [],
       buildTools: ["webpack", "postcss", "sass"],
       customDependencies: {
         devDependencies: {
