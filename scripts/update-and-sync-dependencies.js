@@ -200,7 +200,7 @@ function checkSecurityVulnerabilities(dependencies) {
     // Install dependencies to create package-lock.json
     log('📦 Installing dependencies for audit...', 'cyan');
     const installResult = executeCommand('npm install --package-lock-only', { silent: true });
-    
+
     if (!installResult.success) {
       log('⚠️  Could not install dependencies for audit', 'yellow');
       return { vulnerabilities: [], fixes: [] };
@@ -386,6 +386,11 @@ async function main() {
     if (updateCount > 0) {
       updateDependenciesInConfig(updates);
     }
+
+    const updatedDependencies = getAllDependenciesFromConfig();
+    const securityAfterUpdate = checkSecurityVulnerabilities(updatedDependencies);
+
+    log(`   After the update there are security vulnerabilities: ${securityAfterUpdate.vulnerabilities.length}`, securityAfterUpdate.vulnerabilities.length > 0 ? 'red' : 'green');
 
     // Propagate to templates
     log('\n🔄 Propagating changes to templates...', 'blue');
