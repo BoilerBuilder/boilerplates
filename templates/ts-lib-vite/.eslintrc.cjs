@@ -19,7 +19,7 @@ module.exports = {
       'error',
       'always', // Garante que declarações terminem com ponto e vírgula
     ],
-    'no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas
+    '@typescript-eslint/no-unused-vars': 'warn', // Adverte sobre variáveis declaradas mas não utilizadas no TypeScript
     'import/order': [
       'error',
       {
