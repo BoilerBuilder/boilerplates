@@ -79,4 +79,3 @@ export default [
     ignores: ['**/build', '**/dist', '**/.eslintrc.cjs'],
   },
 ];
-

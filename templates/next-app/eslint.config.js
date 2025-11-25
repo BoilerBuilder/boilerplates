@@ -16,7 +16,9 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...fixupConfigRules(compat.extends('next/core-web-vitals')),
+  ...fixupConfigRules(
+    compat.extends('next/core-web-vitals', 'next/typescript'),
+  ),
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
