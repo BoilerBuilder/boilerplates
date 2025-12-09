@@ -24,7 +24,15 @@ export default [
     ),
   ),
   {
-    files: ['**/*.{js,mjs,cjs,ts,tsx}'],
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,

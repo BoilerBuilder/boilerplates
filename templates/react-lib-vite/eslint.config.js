@@ -79,6 +79,7 @@ export default [
       '**/dist',
       '**/coverage',
       '**/.yalc',
+      '**/.prettierrc.cjs',
     ],
   },
 ];
