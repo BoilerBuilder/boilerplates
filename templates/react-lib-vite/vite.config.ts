@@ -42,6 +42,7 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       coverage: {
+        provider: 'v8',
         reporter: ['text', 'lcov', 'html'],
         exclude: [...coverageConfigDefaults.exclude],
       },

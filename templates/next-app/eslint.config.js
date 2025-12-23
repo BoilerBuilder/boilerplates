@@ -72,7 +72,12 @@ export default [
     },
   },
   {
-    ignores: ['**/node_modules', '**/build', '**/dist', '**/coverage', '**/.yalc'],
+    ignores: [
+      '**/node_modules',
+      '**/build',
+      '**/dist',
+      '**/coverage',
+      '**/.yalc',
+    ],
   },
 ];
-
