@@ -1,15 +1,42 @@
 {
   "compilerOptions": {
+    // Incremental build cache — tsc -b reuses this file to skip unchanged files
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+
+    // Node/Vite-compatible target — vite.config.ts runs in Node, not the browser
     "target": "ES2022",
     "lib": ["ES2023"],
+
+    // ESNext modules + bundler resolution — Vite handles bundling, not tsc
     "module": "ESNext",
     "moduleResolution": "bundler",
+
+    // Allows explicit .ts extensions in imports (e.g. `import './foo.ts'`) — required in bundler mode with noEmit
     "allowImportingTsExtensions": true,
+
+    // Enforces type annotations on imports/exports; prevents accidental runtime imports
     "verbatimModuleSyntax": true,
+
+    // Treats every file as a module even without an explicit import/export
     "moduleDetection": "force",
-    "composite": true,
+
+    // No .js/.d.ts output — this config is type-check only, not compiled
+    // Replaces the previous composite:true which caused unwanted orphan file emission
+    "noEmit": true,
+
     "skipLibCheck": true,
     "strict": true,
+
+    /* Linting — mirrors the app-side rules from base.json so vite.config.ts
+       and vitest.setup.ts are held to the same standard as the app code */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // Bans syntax that runtimes erase (e.g. const enums) — avoids cross-runtime breakage
+    "erasableSyntaxOnly": true,
+    // Requires a default/return in every switch case
+    "noFallthroughCasesInSwitch": true,
+
+    // Provides Node.js global types (process, __dirname, Buffer…) for vite.config.ts
     "types": ["node"]
   },
   "include": ["vite.config.ts", ".config/vitest.setup.ts"]
