@@ -37,17 +37,22 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
-  ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:react/recommended',
-      'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
-      'plugin:prettier/recommended',
-    ),
+// Scope every extended config to the same `files` array so that rules like
+// no-undef and react/* don't run on .cjs / .js config files which lack the
+// globals (module, URL…) declared in the block below.
+const extendedConfigs = fixupConfigRules(
+  compat.extends(
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:prettier/recommended',
   ),
+).map((config) => ({ ...config, files }));
+
+export default [
+  ...extendedConfigs,
   {
     files,
     languageOptions: {
