@@ -1,35 +1,12 @@
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
 import _import from 'eslint-plugin-import';
 import globals from 'globals';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-// Read tsMode from package.json at runtime (defaults to 'strict').
-// Modes allowJs and checkJs are activated via `boilerbuilder ts <mode>` which
-// materialises the tsconfig preset and updates this field — so the linter
-// automatically widens its file scope to include .js/.jsx.
-let tsMode = 'strict';
-try {
-  const pkg = JSON.parse(
-    readFileSync(new URL('./package.json', import.meta.url), 'utf8'),
-  );
-  tsMode = pkg?.boilerbuilder?.tsMode ?? 'strict';
-} catch {
-  // keep default
-}
-
-// strict → TypeScript only (.ts/.tsx); allowJs/checkJs → also lint .js/.jsx
-const files =
-  tsMode === 'strict' ? ['**/*.{ts,tsx}'] : ['**/*.{ts,tsx,js,jsx}'];
-
-// Relax `no-explicit-any` during JS→TS migration; keep it as error in strict mode.
-const noExplicitAny = tsMode === 'strict' ? 'error' : 'warn';
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -41,7 +18,6 @@ export default [
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
       'plugin:react/recommended',
       'plugin:react/jsx-runtime',
       'plugin:react-hooks/recommended',
@@ -49,12 +25,11 @@ export default [
     ),
   ),
   {
-    files,
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
-        React: 'readonly',
         describe: 'readonly',
         it: 'readonly',
         expect: 'readonly',
@@ -65,9 +40,9 @@ export default [
         vi: 'readonly',
         test: 'readonly',
       },
-      parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
+      parserOptions: {},
     },
     plugins: {
       import: fixupPluginRules(_import),
@@ -81,13 +56,12 @@ export default [
       'linebreak-style': 0,
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
-      'no-unused-vars': 'off', // superseded by @typescript-eslint/no-unused-vars
-      '@typescript-eslint/no-unused-vars': [
+      'no-unused-vars': [
         'warn',
-        { ignoreRestSiblings: true },
+        {
+          ignoreRestSiblings: true,
+        },
       ],
-      '@typescript-eslint/no-explicit-any': noExplicitAny,
-      'react/prop-types': 'off', // TypeScript handles prop types
       'react/jsx-sort-props': 'error',
       'import/order': [
         'error',
